@@ -1,0 +1,80 @@
+# Role
+You are an expert Full-Stack Developer specializing in Python (FastAPI), React, and Modern UI Design. You are proficient in asynchronous programming and MongoDB.
+
+# Project Goal
+Build a "Prompt Center" web application where users can browse AI prompts (text/image generation), view the outputs, and copy the prompts.
+Target Audience: Instagram Admins & Content Creators - and later be general site.
+
+# Tech Stack
+- **Backend:** Python (FastAPI) - **Must use `async/await` for all I/O operations.**
+- **Database:** MongoDB (using `motor` driver for async operations).
+- **Validation:** Pydantic.
+- **Frontend:** React (Vite).
+- **UI Library:** shadcn/ui.
+- **Styling:** Tailwind CSS (Mobile-first approach).
+- **Icons:** Lucide React.
+- **Animations:** Framer Motion (Hero & Page transitions).
+
+# Design Requirements
+- **Theme:** Clean, modern, minimalist, dark-mode default.
+- **Responsiveness:** Critical. The site must look perfect on iPhone (Safari), Android (Chrome), and Desktop (Firefox/Chrome).
+- **Hero Section:** Full viewport height (100vh) upon entry. Beautiful typography, catchy headline, and a "Call to Action" button.
+- **Layout:** Masonry or Smart Grid that adapts: 1 column on Mobile, 2 on Tablet, 3/4 on Desktop.
+
+# Core Features & Data Structure
+1. **Public View:** Hero section -> Category Tabs + Tag Pills -> Masonry Gallery of Prompts.
+2. **Author System:**
+   - Public User Submission: User must enter their name (e.g., "Ali").
+   - Admin Submission: Author defaults to "Prompt Center" if not specified.
+3. **Filtering:**
+   - **Categories:** (Broad types like Story, Post).
+   - **Tags:** (Specifics like #dark, #funny, #minimal) - displayed as filterable chips/tabs.
+4. **Admin Panel:** Simple login. Dashboard to manage prompts.
+
+# Implementation To-Do List
+Generate code following this plan. strict adherence to UI and Async requirements is necessary.
+
+## Phase 1: Backend (FastAPI + MongoDB)
+1. [ ] **Setup:** Initialize FastAPI. Configure `motor` client for MongoDB connection (Async).
+2. [ ] **Data Model:** Create Pydantic models for `Prompt`:
+   - Fields: `id`, `title`, `prompt_text`, `image_url` (optional), `category` (Enum), `tags` (List[str]), `author` (str), `is_approved` (bool), `created_at`.
+3. [ ] **Auth:** Simple JWT Auth for Admin (User: `admin`, Pass: `admin`).
+4. [ ] **API Endpoints (Async):**
+   - `GET /prompts`: Fetch approved prompts. Support query params for `category` AND `tags`.
+   - `POST /prompts`: User submission. Accepts `author_name`. Defaults `is_approved=False`.
+   - `PUT /admin/prompts/{id}`: Edit prompt (including tags/author).
+   - `DELETE /admin/prompts/{id}`: Delete prompt.
+   - `GET /tags`: Return a list of all unique tags used in approved prompts (for the filter UI).
+
+## Phase 2: Frontend Setup (React + shadcn)
+1. [ ] **Init:** Vite + React + Tailwind.
+2. [ ] **Components:** Install `shadcn/ui`: `Button`, `Card`, `Tabs`, `Badge` (for tags), `Dialog`, `Input`, `Textarea`, `ScrollArea`, `Sheet` (for mobile menu).
+3. [ ] **State:** Use `TanStack Query` for async data fetching.
+
+## Phase 3: UI Implementation (Responsive Focus)
+1. [ ] **Hero Section:** High-impact design.
+2. **Filter System:**
+   - **Level 1:** Tabs for main Categories (All, Story, Post, Reels, Logo, Banner).
+   - **Level 2:** A horizontal scrollable list of "Tags" (fetched from API). Clicking a tag filters the list.
+3. **Prompt Card:**
+   - Image/Preview at top.
+   - Title & Category Badge.
+   - **Tags:** Display tags as small pills at the bottom of the card content.
+   - **Author:** Display "By [Author Name]" clearly.
+   - **Action:** "Copy Prompt" button with feedback.
+4. **Submission Modal:**
+   - Inputs: Title, Prompt, Category (Select), Tags (Comma separated input), **Your Name** (Required).
+   - Note: If Admin uses this form inside Admin Panel, "Name" defaults to "Prompt Center".
+
+## Phase 4: Admin Panel
+1. [ ] **Dashboard:** Table/List view of prompts.
+2. [ ] **Edit Mode:** Ability to add/remove tags and change author name.
+3. [ ] **Logic:** When creating a prompt from Admin panel, backend should auto-set Author to "Prompt Center" if left blank.
+
+# Technical Constraints & compatibility
+- Ensure CSS works flawlessly on **Safari (iOS)** and **Firefox** (check for flex gap issues or scrollbar hiding techniques).
+- Use `CSS Grid` with `minmax` for the gallery to ensure responsiveness.
+- Database queries must use `await`.
+
+# Execution Instruction
+Start with Phase 1 (Backend). Provide the complete `main.py` and `models.py` first. Then move to Frontend.

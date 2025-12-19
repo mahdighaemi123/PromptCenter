@@ -1,0 +1,45 @@
+version: '3'
+name: prompt_center
+
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app  # سینک کردن کدها (Hot Reload)
+    networks:
+      - my_bridge  # سرویس فرانت‌اند (بدون بیلد)
+
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app             # سینک کردن فایل‌های پروژه
+      - /app/node_modules           # جلوگیری از حذف شدن پکیج‌های نصب شده
+    environment:
+      - CHOKIDAR_USEPOLLING=true    # رفع مشکل هات ریلود در ویندوز/داکر
+    networks:
+      - my_bridge
+  mongodb:
+    image: mongo:6.0
+    restart: unless-stopped
+    ports:
+      - "3012:27017"
+    volumes:
+      - mongodb_data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: my_main_user_1213saa
+      MONGO_INITDB_ROOT_PASSWORD: hwWFgqr3dfq34qefrgeq
+      MONGO_INITDB_DATABASE: db
+    networks:
+      - my_bridge
+
+volumes:
+  mongodb_data:
+
+networks:
+  my_bridge:
+    driver: bridge
