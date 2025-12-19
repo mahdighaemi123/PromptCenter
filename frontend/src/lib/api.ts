@@ -1,7 +1,13 @@
 import axios from 'axios';
 
-// Ensure this matches your FastAPI backend URL
-const API_URL = 'http://localhost:8000';
+const protocol = window.location.protocol;
+
+// 2. Get the current hostname (e.g., 'localhost', '192.168.1.50', 'mysite.com')
+const hostname = window.location.hostname;
+
+// 3. Construct the dynamic URL with port 8000
+// Result examples: "http://localhost:8000" or "http://192.168.1.5:8000"
+const API_URL = `${protocol}//${hostname}:8000`;
 
 export const api = axios.create({
   baseURL: API_URL,
